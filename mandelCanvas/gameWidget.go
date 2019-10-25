@@ -4,13 +4,18 @@ import (
 	"fyne.io/fyne"
 	"fyne.io/fyne/canvas"
 	"fyne.io/fyne/widget"
+	"image"
 )
 
 type gameWidget struct {
-	xCenter float64
-	yCenter float64
-	scale   float64
-	maxIter int
+	xCenter, yCenter float64
+	zoom, origHeight int
+	zoomed bool
+
+	nMainThreads, nDirtyThreads int // Number of threads used. Passed to the renderer.
+
+	// TODO assuming this part is single threaded
+	drag image.Point // Keeps track of dragging offset to move the img rather than redraw
 
 	size     fyne.Size // Widget size
 	position fyne.Position // Widget position
@@ -41,10 +46,10 @@ func (g *gameWidget) Hide() {g.hidden = true}
 var _ fyne.Widget = (*gameWidget)(nil)
 
 func (g *gameWidget) CreateRenderer() fyne.WidgetRenderer {
-	renderer := &gameRenderer{gw: g}
+	renderer := &gameRenderer{gw: g, nMainThreads:g.nMainThreads, nDirtyThreads:g.nDirtyThreads}
 	// Provides width/height! Raster renders using the provided draw func.
 	render := canvas.NewRaster(renderer.draw)
-	// TODO compare performance with NewRasterWithPixels
+	// TODO compare performance with NewRasterWithPixels. With Pixels runs new compute for each pixel.
 	// https://godoc.org/fyne.io/fyne/canvas#NewRasterWithPixels
 	renderer.canvas = render
 	renderer.objects = []fyne.CanvasObject{render}
@@ -60,33 +65,37 @@ func (g *gameWidget) CreateRenderer() fyne.WidgetRenderer {
 var _ fyne.Draggable = (*gameWidget)(nil)
 
 func (g *gameWidget) Dragged(ev *fyne.DragEvent) {
-	//fmt.Println(ev.Position.X)
-	//fmt.Println(ev.Position.Y)
-	//// Dragged is the offset
-	//fmt.Println(ev.DraggedX)
-	//fmt.Println(ev.DraggedY)
-	// TODO move the viewport
-	width := float64(g.size.Width)
-	height := float64(g.size.Height)
-	ratio := width / height
-	xRange := -2.0 * g.scale * ratio
-	yRange := -2.0 * g.scale
-	diffX := float64(ev.DraggedX) * xRange / width
-	diffY := float64(ev.DraggedY) * yRange / height
-	//fmt.Println(diffX)
-	//fmt.Println(diffY)
-	g.xCenter += diffX
-	g.yCenter += diffY
+	// Update drag history
+	g.drag = g.drag.Add(image.Point{X: ev.DraggedX, Y: ev.DraggedY})
+
+	// Move the computation viewport
+	scale := -2.0 * zoomToScale(g.zoom) / float64(g.origHeight)
+	g.xCenter += float64(ev.DraggedX) * scale
+	g.yCenter += float64(ev.DraggedY) * scale
+	// TODO ensure centers are multiples of something to improve caching.
+	//fmt.Println(g.xCenter, g.yCenter)
+
 	widget.Refresh(g)
-	// TODO Max redraw rate
 }
 
 func (g *gameWidget) DragEnd() {}
 
 var _ fyne.Scrollable = (*gameWidget)(nil)
 
-func (g *gameWidget) Scrolled(*fyne.ScrollEvent) {
-	// TODO zooming
-	//panic("implement me")
-	// TODO Max redraw rate
+const (
+	ZoomMax = 19
+	ZoomMin = 0
+)
+
+func (g *gameWidget) Scrolled(ev *fyne.ScrollEvent) {
+	prevZoom := g.zoom
+	if ev.DeltaY < 0 {
+		g.zoom = fyne.Max(g.zoom - 1, ZoomMin)
+	} else {
+		g.zoom = fyne.Min(g.zoom + 1, ZoomMax)
+	}
+	if prevZoom != g.zoom {
+		g.zoomed = true
+		widget.Refresh(g)
+	}
 }
