@@ -15,8 +15,8 @@ var _ fyne.WidgetRenderer = (*gameRenderer)(nil)
 type gameRenderer struct {
 	render   *canvas.Raster
 	imgCache *image.RGBA
-	objects []fyne.CanvasObject // required by interface (?)
-	game *game
+	objects  []fyne.CanvasObject // required by interface (?)
+	game     *game
 }
 
 func (g *gameRenderer) MinSize() fyne.Size {
@@ -34,6 +34,7 @@ func (g *gameRenderer) ApplyTheme() {
 func (g *gameRenderer) BackgroundColor() color.Color {
 	return theme.BackgroundColor()
 }
+
 // On widget refresh, render the underlying items
 func (g *gameRenderer) Refresh() {
 	canvas.Refresh(g.render)

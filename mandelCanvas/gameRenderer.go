@@ -11,25 +11,26 @@ import (
 
 type gameRenderer struct {
 	nMainThreads, nDirtyThreads int
-	canvas  fyne.CanvasObject
-	img     *image.NRGBA
-	objects []fyne.CanvasObject // required by interface (?)
-	gw      *gameWidget
+	canvas                      fyne.CanvasObject
+	img                         *image.NRGBA
+	objects                     []fyne.CanvasObject // required by interface (?)
+	gw                          *gameWidget
 }
-
 
 /**** WidgetRenderer ****/
 var _ fyne.WidgetRenderer = (*gameRenderer)(nil)
 
-func (g *gameRenderer) Layout(size fyne.Size) {g.canvas.Resize(size)}
+func (g *gameRenderer) Layout(size fyne.Size) { g.canvas.Resize(size) }
+
 // Initial default size
-func (g *gameRenderer) MinSize() fyne.Size {return fyne.NewSize(g.gw.origHeight, g.gw.origHeight)}
+func (g *gameRenderer) MinSize() fyne.Size { return fyne.NewSize(g.gw.origHeight, g.gw.origHeight) }
+
 // On widget refresh, canvas the underlying items
-func (g *gameRenderer) Refresh() {canvas.Refresh(g.canvas)}
-func (g *gameRenderer) ApplyTheme() {}
-func (g *gameRenderer) BackgroundColor() color.Color {return theme.BackgroundColor()}
-func (g *gameRenderer) Objects() []fyne.CanvasObject {return g.objects}
-func (g *gameRenderer) Destroy() {}
+func (g *gameRenderer) Refresh()                     { canvas.Refresh(g.canvas) }
+func (g *gameRenderer) ApplyTheme()                  {}
+func (g *gameRenderer) BackgroundColor() color.Color { return theme.BackgroundColor() }
+func (g *gameRenderer) Objects() []fyne.CanvasObject { return g.objects }
+func (g *gameRenderer) Destroy()                     {}
 
 // Returns true if the image is nil or size is wrong
 func (g *gameRenderer) needNewImage(w, h int) bool {
@@ -57,13 +58,13 @@ func (g *gameRenderer) draw(w, h int) image.Image {
 	// Calculate dirty rectangles https://blog.golang.org/go-imagedraw-package
 	innerInt := b.Max.Add(g.gw.drag).Mod(b)
 	outerInt := innerInt.Sub(g.gw.drag)
-	dirtyX:= image.Rectangle{
+	dirtyX := image.Rectangle{
 		Min: innerInt,
-		Max: image.Point{X: outerInt.X, Y: b.Max.Y - outerInt.Y,},
+		Max: image.Point{X: outerInt.X, Y: b.Max.Y - outerInt.Y},
 	}.Canon()
 	dirtyY := image.Rectangle{
 		Min: innerInt,
-		Max: image.Point{X: b.Max.X - outerInt.X, Y: outerInt.Y,},
+		Max: image.Point{X: b.Max.X - outerInt.X, Y: outerInt.Y},
 	}.Canon()
 	dirtyInt := image.Rectangle{Min: innerInt, Max: outerInt}.Canon()
 

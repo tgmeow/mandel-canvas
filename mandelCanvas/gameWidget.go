@@ -10,43 +10,41 @@ import (
 type gameWidget struct {
 	xCenter, yCenter float64
 	zoom, origHeight int
-	zoomed bool
+	zoomed           bool
 
 	nMainThreads, nDirtyThreads int // Number of threads used. Passed to the renderer.
 
 	// TODO assuming this part is single threaded
 	drag image.Point // Keeps track of dragging offset to move the img rather than redraw
 
-	size     fyne.Size // Widget size
+	size     fyne.Size     // Widget size
 	position fyne.Position // Widget position
-	hidden   bool // show/hide widget
+	hidden   bool          // show/hide widget
 }
-
 
 /**** Canvas Object ****/
 var _ fyne.CanvasObject = (*gameWidget)(nil)
 
-func (g *gameWidget) Size() fyne.Size {return g.size}
+func (g *gameWidget) Size() fyne.Size { return g.size }
 func (g *gameWidget) Resize(size fyne.Size) {
 	g.size = size
 	widget.Renderer(g).Layout(size)
 }
-func (g *gameWidget) Position() fyne.Position {return g.position}
+func (g *gameWidget) Position() fyne.Position { return g.position }
 func (g *gameWidget) Move(pos fyne.Position) {
 	g.position = pos
 	widget.Renderer(g).Layout(g.size)
 }
-func (g *gameWidget) MinSize() fyne.Size {return widget.Renderer(g).MinSize()}
-func (g *gameWidget) Visible() bool {return !g.hidden}
-func (g *gameWidget) Show() {g.hidden = false}
-func (g *gameWidget) Hide() {g.hidden = true}
-
+func (g *gameWidget) MinSize() fyne.Size { return widget.Renderer(g).MinSize() }
+func (g *gameWidget) Visible() bool      { return !g.hidden }
+func (g *gameWidget) Show()              { g.hidden = false }
+func (g *gameWidget) Hide()              { g.hidden = true }
 
 /**** Widget ****/
 var _ fyne.Widget = (*gameWidget)(nil)
 
 func (g *gameWidget) CreateRenderer() fyne.WidgetRenderer {
-	renderer := &gameRenderer{gw: g, nMainThreads:g.nMainThreads, nDirtyThreads:g.nDirtyThreads}
+	renderer := &gameRenderer{gw: g, nMainThreads: g.nMainThreads, nDirtyThreads: g.nDirtyThreads}
 	// Provides width/height! Raster renders using the provided draw func.
 	render := canvas.NewRaster(renderer.draw)
 	// TODO compare performance with NewRasterWithPixels. With Pixels runs new compute for each pixel.
@@ -55,7 +53,6 @@ func (g *gameWidget) CreateRenderer() fyne.WidgetRenderer {
 	renderer.objects = []fyne.CanvasObject{render}
 	return renderer
 }
-
 
 /****  Mouse Interactions ****/
 //var _ fyne.Tappable = (*gameWidget)(nil)
@@ -90,9 +87,9 @@ const (
 func (g *gameWidget) Scrolled(ev *fyne.ScrollEvent) {
 	prevZoom := g.zoom
 	if ev.DeltaY < 0 {
-		g.zoom = fyne.Max(g.zoom - 1, ZoomMin)
+		g.zoom = fyne.Max(g.zoom-1, ZoomMin)
 	} else {
-		g.zoom = fyne.Min(g.zoom + 1, ZoomMax)
+		g.zoom = fyne.Min(g.zoom+1, ZoomMax)
 	}
 	if prevZoom != g.zoom {
 		g.zoomed = true

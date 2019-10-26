@@ -22,9 +22,11 @@ import (
 // Bounds for the xy coordinates that the image shows.
 type ComputeBounds64 struct {
 	xMin, xMax, yMin, yMax float64
-	zoom, maxIter           int
+	zoom, maxIter          int
 }
+
 const ZoomPower = 3
+
 func zoomToScale(zoom int) float64 {
 	return 1.0 / math.Pow(ZoomPower, float64(zoom))
 }
@@ -42,7 +44,7 @@ func getComputeBounds64(xCenter, yCenter float64, zoom, width, height, origHeigh
 		yMin:    yCenter - hAdj,
 		yMax:    yCenter + hAdj,
 		maxIter: int(100 * (1 + math.Pow(math.Log10(scale), 1.25))),
-		zoom: zoom,
+		zoom:    zoom,
 	}
 }
 

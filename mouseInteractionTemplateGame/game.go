@@ -56,7 +56,6 @@ func (g *game) Hide() {
 	g.hidden = true
 }
 
-
 func (g *game) CreateRenderer() fyne.WidgetRenderer {
 	renderer := &gameRenderer{game: g}
 
@@ -68,7 +67,6 @@ func (g *game) CreateRenderer() fyne.WidgetRenderer {
 
 	return renderer
 }
-
 
 //func (g *game) typedRune(r rune) {
 //	if r == ' ' {

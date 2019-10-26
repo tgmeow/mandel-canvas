@@ -6,10 +6,10 @@ import (
 
 func newGameWidget() *gameWidget {
 	return &gameWidget{
-		xCenter:  -0.5,
-		zoom:    0,
-		origHeight: 512,
-		nMainThreads: 32,
+		xCenter:       -0.5,
+		zoom:          0,
+		origHeight:    512,
+		nMainThreads:  32,
 		nDirtyThreads: 16,
 	}
 }
