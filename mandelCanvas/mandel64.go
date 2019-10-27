@@ -1,23 +1,12 @@
 package main
 
 import (
+	"fyne.io/fyne"
 	"image"
 	"image/color"
 	"math"
 	"sync"
 )
-
-// Map key. Each point will be a string format with scale depending on zoom.
-//type MandelCacheKey struct {
-//	xPoint, yPoint string // big.float does not work because no arithmetic "==" and float is poofy.
-//}
-
-// TODO pull from cache when possible
-// Caches mandel computations.
-//type MandelCache struct {
-//	// Array of maps, one for each supported zoom level.
-//	cache [20]map[MandelCacheKey]color.Color
-//}
 
 // Bounds for the xy coordinates that the image shows.
 type ComputeBounds64 struct {
@@ -25,15 +14,21 @@ type ComputeBounds64 struct {
 	zoom, maxIter          int
 }
 
-const ZoomPower = 3
+const ZoomPower = 2.5
 
-func zoomToScale(zoom int) float64 {
-	return 1.0 / math.Pow(ZoomPower, float64(zoom))
+// Calculate the scale inverse, given a zoom. Preferable, since does not calc the 1.0 / val.
+func zoomToScaleInv(zoom int) float64 {
+	return math.Pow(ZoomPower, float64(zoom))
+}
+
+// Converts 1/scale into maxIter
+func scaleInvToMaxIter(scale float64) int {
+	return int(100 * (1 + math.Pow(math.Log10(scale), 1.25)))
 }
 
 // Creates a ComputeBounds struct from the necessary parameters using float64.
 func getComputeBounds64(xCenter, yCenter float64, zoom, width, height, origHeight int) ComputeBounds64 {
-	scale := math.Pow(ZoomPower, float64(zoom))
+	scale := zoomToScaleInv(zoom)
 	soH := scale * float64(origHeight)
 	wAdj := float64(width) / soH
 	hAdj := float64(height) / soH
@@ -43,13 +38,16 @@ func getComputeBounds64(xCenter, yCenter float64, zoom, width, height, origHeigh
 		xMax:    xCenter + wAdj,
 		yMin:    yCenter - hAdj,
 		yMax:    yCenter + hAdj,
-		maxIter: int(100 * (1 + math.Pow(math.Log10(scale), 1.25))),
+		maxIter: scaleInvToMaxIter(scale),
 		zoom:    zoom,
 	}
 }
 
 // Map a number of iterations to a color
 func iterationToColor64(iter, maxIter int) color.Color {
+	if iter == maxIter {
+		return color.Gray{Y: 0}
+	}
 	val := uint8(math.MaxUint8 * float64(iter) / float64(maxIter))
 	return color.Gray{Y: val}
 }
@@ -87,10 +85,12 @@ func computeImage64(img *image.NRGBA, cb *ComputeBounds64, ibA []*image.Rectangl
 	for ibI := 0; ibI < len(ibA); ibI++ {
 		ib := ibA[ibI]
 		height := ib.Max.Y - ib.Min.Y
+		nThreads = fyne.Min(height, nThreads) // Limit the number of threads to at most 1 per row
 		sliceHeight := float64(height) / float64(nThreads)
 		for i := 0; i < nThreads; i++ {
 			// Slice image into rows.
-			ibTemp := *ib // Copy the x values.
+			// TODO improve performance by splitting in the longer dimension
+			ibTemp := *ib // Copy the existing values and reassign a slice.
 			ibTemp.Min.Y = ib.Min.Y + int(float64(i)*sliceHeight)
 			ibTemp.Max.Y = ib.Min.Y + int(float64(i+1)*sliceHeight)
 			if i+1 == nThreads {

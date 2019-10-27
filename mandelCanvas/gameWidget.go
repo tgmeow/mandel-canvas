@@ -5,6 +5,8 @@ import (
 	"fyne.io/fyne/canvas"
 	"fyne.io/fyne/widget"
 	"image"
+	"log"
+	"math"
 )
 
 type gameWidget struct {
@@ -12,10 +14,10 @@ type gameWidget struct {
 	zoom, origHeight int
 	zoomed           bool
 
-	nMainThreads, nDirtyThreads int // Number of threads used. Passed to the renderer.
+	nThreads int // Number of threads used.
 
-	// TODO assuming this part is single threaded
-	drag image.Point // Keeps track of dragging offset to move the img rather than redraw
+	drag               image.Point // Keeps track of ongoing drag to move the img. Reset on Draw.
+	wasStationaryClick bool
 
 	size     fyne.Size     // Widget size
 	position fyne.Position // Widget position
@@ -44,33 +46,58 @@ func (g *gameWidget) Hide()              { g.hidden = true }
 var _ fyne.Widget = (*gameWidget)(nil)
 
 func (g *gameWidget) CreateRenderer() fyne.WidgetRenderer {
-	renderer := &gameRenderer{gw: g, nMainThreads: g.nMainThreads, nDirtyThreads: g.nDirtyThreads}
-	// Provides width/height! Raster renders using the provided draw func.
+	renderer := &gameRenderer{gw: g}
 	render := canvas.NewRaster(renderer.draw)
-	// TODO compare performance with NewRasterWithPixels. With Pixels runs new compute for each pixel.
-	// https://godoc.org/fyne.io/fyne/canvas#NewRasterWithPixels
 	renderer.canvas = render
 	renderer.objects = []fyne.CanvasObject{render}
 	return renderer
 }
 
+// Rounds n to a multiple of x.
+func roundNearest(n, x float64) float64 {
+	return math.Round(n/x) * x
+}
+
+// Rounds the image centers to a multiple of scale.
+func (g *gameWidget) roundCenters() {
+	scale := -2.0 / (float64(g.origHeight) * zoomToScaleInv(g.zoom))
+	g.xCenter = roundNearest(g.xCenter, scale)
+	g.yCenter = roundNearest(g.yCenter, scale)
+}
+
 /****  Mouse Interactions ****/
-//var _ fyne.Tappable = (*gameWidget)(nil)
-//func (g *gameWidget) Tapped(ev *fyne.PointEvent) {}
-//func (g *gameWidget) TappedSecondary(ev *fyne.PointEvent) {}
+var _ fyne.Tappable = (*gameWidget)(nil)
+
+func (g *gameWidget) printImageConfig() {
+	scaleInv := zoomToScaleInv(g.zoom)
+	maxIter := scaleInvToMaxIter(scaleInv)
+	log.Printf("Config: W=%d H=%d x=%.12f y=%.12f scale=%e maxIter=%d\n",
+		g.size.Width, g.size.Height, g.xCenter, g.yCenter, 1.0/scaleInv, maxIter)
+}
+
+func (g *gameWidget) Tapped(ev *fyne.PointEvent) {
+	g.wasStationaryClick = true
+}
+func (g *gameWidget) TappedSecondary(ev *fyne.PointEvent) {
+	if g.wasStationaryClick {
+		g.printImageConfig()
+	}
+	g.wasStationaryClick = true
+}
 
 var _ fyne.Draggable = (*gameWidget)(nil)
 
 func (g *gameWidget) Dragged(ev *fyne.DragEvent) {
 	// Update drag history
+	g.wasStationaryClick = false
 	g.drag = g.drag.Add(image.Point{X: ev.DraggedX, Y: ev.DraggedY})
 
 	// Move the computation viewport
-	scale := -2.0 * zoomToScale(g.zoom) / float64(g.origHeight)
+	scale := -2.0 / (float64(g.origHeight) * zoomToScaleInv(g.zoom))
 	g.xCenter += float64(ev.DraggedX) * scale
 	g.yCenter += float64(ev.DraggedY) * scale
-	// TODO ensure centers are multiples of something to improve caching.
-	//fmt.Println(g.xCenter, g.yCenter)
+	// Ensure centers are multiples of scale to improve caching.
+	g.roundCenters()
 
 	widget.Refresh(g)
 }
@@ -92,6 +119,7 @@ func (g *gameWidget) Scrolled(ev *fyne.ScrollEvent) {
 		g.zoom = fyne.Min(g.zoom+1, ZoomMax)
 	}
 	if prevZoom != g.zoom {
+		g.roundCenters()
 		g.zoomed = true
 		widget.Refresh(g)
 	}
