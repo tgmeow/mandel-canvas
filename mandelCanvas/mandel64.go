@@ -2,6 +2,7 @@ package main
 
 import (
 	"fyne.io/fyne"
+	deferredTicToc "github.com/tgmeow/deferred-tic-toc"
 	"image"
 	"image/color"
 	"math"
@@ -78,26 +79,66 @@ func computeImageWorker64(wg *sync.WaitGroup, img *image.NRGBA, cb *ComputeBound
 	}
 }
 
-// Creates threads to compute the image. ib determines what bounds to draw at.
+const MaxRowLength = 128 // An arbitrary maximum row length for a single thread to compute on.
+// Splits the image vertically (into multiple columns) and computes in up to nThreads.
+// TODO ensure that this improves performance. (Overall it is a small impact, good OR bad.)
+func computeImage64V(wg *sync.WaitGroup, img *image.NRGBA, cb *ComputeBounds64, ib *image.Rectangle, nThreads int) {
+	if nThreads == 0 {
+		return
+	}
+	defer wg.Done()
+	width := ib.Max.X - ib.Min.X
+	height := ib.Max.Y - ib.Min.Y
+	if width == 0 || height == 0 {
+		return
+	}
+	nThreads = fyne.Min((width/MaxRowLength)+1, nThreads) // Limit the number of threads depending on size
+	sliceWidth := float64(width) / float64(nThreads)
+	for i := 0; i < nThreads; i++ {
+		// Slice image into columns.
+		ibTemp := *ib // Copy the existing values and reassign a slice.
+		ibTemp.Min.X = ib.Min.X + int(float64(i)*sliceWidth)
+		ibTemp.Max.X = ib.Min.X + int(float64(i+1)*sliceWidth)
+		if i+1 == nThreads {
+			ibTemp.Max.X = ib.Max.X // Run until the end.
+		}
+		wg.Add(1)
+		go computeImageWorker64(wg, img, cb, &ibTemp)
+	}
+}
+
+// Creates threads to compute the image. Splits into rows. ib determines what bounds to draw at.
 func computeImage64(img *image.NRGBA, cb *ComputeBounds64, ibA []*image.Rectangle, nThreads int) {
-	//defer deferredTicToc.TicToc("computeImage")()
+	if nThreads == 0 {
+		return
+	}
+	defer deferredTicToc.TicToc("computeImage")()
 	var wg sync.WaitGroup
 	for ibI := 0; ibI < len(ibA); ibI++ {
 		ib := ibA[ibI]
+		width := ib.Max.X - ib.Min.X
 		height := ib.Max.Y - ib.Min.Y
-		nThreads = fyne.Min(height, nThreads) // Limit the number of threads to at most 1 per row
-		sliceHeight := float64(height) / float64(nThreads)
-		for i := 0; i < nThreads; i++ {
+		if width == 0 || height == 0 {
+			continue
+		}
+		nThreadsLimit := fyne.Min(height, nThreads) // Limit the number of threads to at most 1 per row
+		sliceHeight := float64(height) / float64(nThreadsLimit)
+		for i := 0; i < nThreadsLimit; i++ {
 			// Slice image into rows.
-			// TODO improve performance by splitting in the longer dimension
 			ibTemp := *ib // Copy the existing values and reassign a slice.
 			ibTemp.Min.Y = ib.Min.Y + int(float64(i)*sliceHeight)
 			ibTemp.Max.Y = ib.Min.Y + int(float64(i+1)*sliceHeight)
-			if i+1 == nThreads {
+			if i+1 == nThreadsLimit {
 				ibTemp.Max.Y = ib.Max.Y // Run until the end.
 			}
 			wg.Add(1)
-			go computeImageWorker64(&wg, img, cb, &ibTemp)
+			if nThreads != nThreadsLimit {
+				// Split into threaded columns, since bottle necked in number of rows to compute.
+				go computeImage64V(&wg, img, cb, &ibTemp, nThreadsLimit)
+			} else {
+				go computeImageWorker64(&wg, img, cb, &ibTemp) // Single thread for row
+			}
+
 		}
 	}
 	wg.Wait()
