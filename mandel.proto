@@ -1,22 +1,44 @@
 syntax = "proto3";
+package mandel;
 
-message MandelParams {
-    DoubleRect cb = 1;
-    IntRect ib = 2;
-    int32 zoom = 3;
-    int32 maxIter = 4;
+message MandelPixel {
+    uint32 num_iter = 1;
 }
 
 message DoubleRect {
-    double xMin = 1;
-    double xMax = 2;
-    double yMin = 3;
-    double yMax = 4;
+    double xmin = 1;
+    double xmax = 2;
+    double ymin = 3;
+    double ymax = 4;
 }
 
 message IntRect {
-    int32 xMin = 1;
-    int32 xMax = 2;
-    int32 yMin = 3;
-    int32 yMax = 4;
+    int32 xmin = 1;
+    int32 xmax = 2;
+    int32 ymin = 3;
+    int32 ymax = 4;
+}
+
+// RPC style computation request. Should respond with MandelResponse object.
+message MandelRequest {
+    // coordinates of the mandelbrot viewport
+    DoubleRect cb = 1;
+
+    // coordinates of the pixels to render relative to the image viewport
+    IntRect ib = 2;
+
+    // Tells the computation when to stop
+    uint32 max_iter = 3;
+
+    // Dimensions of the image viewport
+    int32 view_width = 6;
+    int32 view_height = 7;
+}
+
+// RPC style computation response. data should be single array of iters of each pixel in ib.
+message MandelResponse {
+    IntRect ib = 1;
+
+    // Pixel data array. In our case it will just contain the number of iterations.
+    repeated MandelPixel data = 2;
 }
