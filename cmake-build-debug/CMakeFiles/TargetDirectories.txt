@@ -1,5 +1,0 @@
-/home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/config_json_mandel_service.elf.bin.dir
-/home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/mandel_service.elf.bin.dir
-/home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/mandel_service.dir
