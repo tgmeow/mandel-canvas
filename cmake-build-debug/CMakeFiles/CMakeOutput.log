@@ -1,0 +1,320 @@
+The system is: Linux - 5.0.0-32-generic - x86_64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /usr/bin/clang-6.0 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is Clang, found in "/home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/3.15.3/CompilerIdC/a.out"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: /usr/bin/clang-6.0 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+
+The CXX compiler identification is Clang, found in "/home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/3.15.3/CompilerIdCXX/a.out"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: /home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_def21/fast && /usr/bin/make -f CMakeFiles/cmTC_def21.dir/build.make CMakeFiles/cmTC_def21.dir/build
+make[1]: Entering directory '/home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_def21.dir/testCCompiler.c.o
+/usr/bin/clang-6.0    -o CMakeFiles/cmTC_def21.dir/testCCompiler.c.o   -c /home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C static library libcmTC_def21.a
+/opt/clion-2019.3/bin/cmake/linux/bin/cmake -P CMakeFiles/cmTC_def21.dir/cmake_clean_target.cmake
+/opt/clion-2019.3/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_def21.dir/link.txt --verbose=1
+/usr/bin/ar qc libcmTC_def21.a  CMakeFiles/cmTC_def21.dir/testCCompiler.c.o
+/usr/bin/ranlib libcmTC_def21.a
+make[1]: Leaving directory '/home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_a598c/fast && /usr/bin/make -f CMakeFiles/cmTC_a598c.dir/build.make CMakeFiles/cmTC_a598c.dir/build
+make[1]: Entering directory '/home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_a598c.dir/CMakeCCompilerABI.c.o
+/usr/bin/clang-6.0   -v -o CMakeFiles/cmTC_a598c.dir/CMakeCCompilerABI.c.o   -c /opt/clion-2019.3/bin/cmake/linux/share/cmake-3.15/Modules/CMakeCCompilerABI.c
+clang version 6.0.1-11 (tags/RELEASE_601/final)
+Target: x86_64-pc-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/8
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/9
+Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/8
+Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/9
+Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/8
+Candidate multilib: .;@m64
+Selected multilib: .;@m64
+ "/usr/lib/llvm-6.0/bin/clang" -cc1 -triple x86_64-pc-linux-gnu -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model static -mthread-model posix -mdisable-fp-elim -fmath-errno -masm-verbose -mconstructor-aliases -munwind-tables -fuse-init-array -target-cpu x86-64 -dwarf-column-info -debugger-tuning=gdb -v -coverage-notes-file /home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp/CMakeFiles/cmTC_a598c.dir/CMakeCCompilerABI.c.gcno -resource-dir /usr/lib/llvm-6.0/lib/clang/6.0.1 -internal-isystem /usr/local/include -internal-isystem /usr/lib/llvm-6.0/lib/clang/6.0.1/include -internal-externc-isystem /usr/include/x86_64-linux-gnu -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdebug-compilation-dir /home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp -ferror-limit 19 -fmessage-length 0 -fobjc-runtime=gcc -fdiagnostics-show-option -o CMakeFiles/cmTC_a598c.dir/CMakeCCompilerABI.c.o -x c /opt/clion-2019.3/bin/cmake/linux/share/cmake-3.15/Modules/CMakeCCompilerABI.c
+clang -cc1 version 6.0.1 based upon LLVM 6.0.1 default target x86_64-pc-linux-gnu
+ignoring nonexistent directory "/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /usr/local/include
+ /usr/lib/llvm-6.0/lib/clang/6.0.1/include
+ /usr/include/x86_64-linux-gnu
+ /usr/include
+End of search list.
+Linking C static library libcmTC_a598c.a
+/opt/clion-2019.3/bin/cmake/linux/bin/cmake -P CMakeFiles/cmTC_a598c.dir/cmake_clean_target.cmake
+/opt/clion-2019.3/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a598c.dir/link.txt --verbose=1
+/usr/bin/ar qc libcmTC_a598c.a  CMakeFiles/cmTC_a598c.dir/CMakeCCompilerABI.c.o
+/usr/bin/ranlib libcmTC_a598c.a
+make[1]: Leaving directory '/home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+
+Parsed C implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/usr/local/include]
+    add: [/usr/lib/llvm-6.0/lib/clang/6.0.1/include]
+    add: [/usr/include/x86_64-linux-gnu]
+    add: [/usr/include]
+  end of search list found
+  collapse include dir [/usr/local/include] ==> [/usr/local/include]
+  collapse include dir [/usr/lib/llvm-6.0/lib/clang/6.0.1/include] ==> [/usr/lib/llvm-6.0/lib/clang/6.0.1/include]
+  collapse include dir [/usr/include/x86_64-linux-gnu] ==> [/usr/include/x86_64-linux-gnu]
+  collapse include dir [/usr/include] ==> [/usr/include]
+  implicit include dirs: [/usr/local/include;/usr/lib/llvm-6.0/lib/clang/6.0.1/include;/usr/include/x86_64-linux-gnu;/usr/include]
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/usr/bin/make cmTC_a598c/fast && /usr/bin/make -f CMakeFiles/cmTC_a598c.dir/build.make CMakeFiles/cmTC_a598c.dir/build]
+  ignore line: [make[1]: Entering directory '/home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp']
+  ignore line: [Building C object CMakeFiles/cmTC_a598c.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/bin/clang-6.0   -v -o CMakeFiles/cmTC_a598c.dir/CMakeCCompilerABI.c.o   -c /opt/clion-2019.3/bin/cmake/linux/share/cmake-3.15/Modules/CMakeCCompilerABI.c]
+  ignore line: [clang version 6.0.1-11 (tags/RELEASE_601/final)]
+  ignore line: [Target: x86_64-pc-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /usr/bin]
+  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/8]
+  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/9]
+  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/8]
+  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/9]
+  ignore line: [Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/8]
+  ignore line: [Candidate multilib: .]
+  ignore line: [@m64]
+  ignore line: [Selected multilib: .]
+  ignore line: [@m64]
+  ignore line: [ "/usr/lib/llvm-6.0/bin/clang" -cc1 -triple x86_64-pc-linux-gnu -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model static -mthread-model posix -mdisable-fp-elim -fmath-errno -masm-verbose -mconstructor-aliases -munwind-tables -fuse-init-array -target-cpu x86-64 -dwarf-column-info -debugger-tuning=gdb -v -coverage-notes-file /home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp/CMakeFiles/cmTC_a598c.dir/CMakeCCompilerABI.c.gcno -resource-dir /usr/lib/llvm-6.0/lib/clang/6.0.1 -internal-isystem /usr/local/include -internal-isystem /usr/lib/llvm-6.0/lib/clang/6.0.1/include -internal-externc-isystem /usr/include/x86_64-linux-gnu -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdebug-compilation-dir /home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp -ferror-limit 19 -fmessage-length 0 -fobjc-runtime=gcc -fdiagnostics-show-option -o CMakeFiles/cmTC_a598c.dir/CMakeCCompilerABI.c.o -x c /opt/clion-2019.3/bin/cmake/linux/share/cmake-3.15/Modules/CMakeCCompilerABI.c]
+  ignore line: [clang -cc1 version 6.0.1 based upon LLVM 6.0.1 default target x86_64-pc-linux-gnu]
+  ignore line: [ignoring nonexistent directory "/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /usr/local/include]
+  ignore line: [ /usr/lib/llvm-6.0/lib/clang/6.0.1/include]
+  ignore line: [ /usr/include/x86_64-linux-gnu]
+  ignore line: [ /usr/include]
+  ignore line: [End of search list.]
+  ignore line: [Linking C static library libcmTC_a598c.a]
+  ignore line: [/opt/clion-2019.3/bin/cmake/linux/bin/cmake -P CMakeFiles/cmTC_a598c.dir/cmake_clean_target.cmake]
+  ignore line: [/opt/clion-2019.3/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a598c.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/ar qc libcmTC_a598c.a  CMakeFiles/cmTC_a598c.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/bin/ranlib libcmTC_a598c.a]
+  ignore line: [make[1]: Leaving directory '/home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp']
+  ignore line: []
+  ignore line: []
+  implicit libs: []
+  implicit dirs: []
+  implicit fwks: []
+
+
+Determining if the CXX compiler works passed with the following output:
+Change Dir: /home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_5793f/fast && /usr/bin/make -f CMakeFiles/cmTC_5793f.dir/build.make CMakeFiles/cmTC_5793f.dir/build
+make[1]: Entering directory '/home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_5793f.dir/testCXXCompiler.cxx.o
+/usr/bin/clang-6.0     -o CMakeFiles/cmTC_5793f.dir/testCXXCompiler.cxx.o -c /home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX static library libcmTC_5793f.a
+/opt/clion-2019.3/bin/cmake/linux/bin/cmake -P CMakeFiles/cmTC_5793f.dir/cmake_clean_target.cmake
+/opt/clion-2019.3/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5793f.dir/link.txt --verbose=1
+/usr/bin/ar qc libcmTC_5793f.a  CMakeFiles/cmTC_5793f.dir/testCXXCompiler.cxx.o
+/usr/bin/ranlib libcmTC_5793f.a
+make[1]: Leaving directory '/home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: /home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_86829/fast && /usr/bin/make -f CMakeFiles/cmTC_86829.dir/build.make CMakeFiles/cmTC_86829.dir/build
+make[1]: Entering directory '/home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_86829.dir/CMakeCXXCompilerABI.cpp.o
+/usr/bin/clang-6.0    -v -o CMakeFiles/cmTC_86829.dir/CMakeCXXCompilerABI.cpp.o -c /opt/clion-2019.3/bin/cmake/linux/share/cmake-3.15/Modules/CMakeCXXCompilerABI.cpp
+clang version 6.0.1-11 (tags/RELEASE_601/final)
+Target: x86_64-pc-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/8
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/9
+Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/8
+Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/9
+Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/8
+Candidate multilib: .;@m64
+Selected multilib: .;@m64
+ "/usr/lib/llvm-6.0/bin/clang" -cc1 -triple x86_64-pc-linux-gnu -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model static -mthread-model posix -mdisable-fp-elim -fmath-errno -masm-verbose -mconstructor-aliases -munwind-tables -fuse-init-array -target-cpu x86-64 -dwarf-column-info -debugger-tuning=gdb -v -coverage-notes-file /home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp/CMakeFiles/cmTC_86829.dir/CMakeCXXCompilerABI.cpp.gcno -resource-dir /usr/lib/llvm-6.0/lib/clang/6.0.1 -internal-isystem /usr/bin/../lib/gcc/x86_64-linux-gnu/8/../../../../include/c++/8 -internal-isystem /usr/bin/../lib/gcc/x86_64-linux-gnu/8/../../../../include/x86_64-linux-gnu/c++/8 -internal-isystem /usr/bin/../lib/gcc/x86_64-linux-gnu/8/../../../../include/x86_64-linux-gnu/c++/8 -internal-isystem /usr/bin/../lib/gcc/x86_64-linux-gnu/8/../../../../include/c++/8/backward -internal-isystem /usr/include/clang/6.0.1/include/ -internal-isystem /usr/local/include -internal-isystem /usr/lib/llvm-6.0/lib/clang/6.0.1/include -internal-externc-isystem /usr/include/x86_64-linux-gnu -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdeprecated-macro -fdebug-compilation-dir /home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp -ferror-limit 19 -fmessage-length 0 -fobjc-runtime=gcc -fcxx-exceptions -fexceptions -fdiagnostics-show-option -o CMakeFiles/cmTC_86829.dir/CMakeCXXCompilerABI.cpp.o -x c++ /opt/clion-2019.3/bin/cmake/linux/share/cmake-3.15/Modules/CMakeCXXCompilerABI.cpp
+clang -cc1 version 6.0.1 based upon LLVM 6.0.1 default target x86_64-pc-linux-gnu
+ignoring nonexistent directory "/include"
+ignoring duplicate directory "/usr/bin/../lib/gcc/x86_64-linux-gnu/8/../../../../include/x86_64-linux-gnu/c++/8"
+ignoring duplicate directory "/usr/include/clang/6.0.1/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /usr/bin/../lib/gcc/x86_64-linux-gnu/8/../../../../include/c++/8
+ /usr/bin/../lib/gcc/x86_64-linux-gnu/8/../../../../include/x86_64-linux-gnu/c++/8
+ /usr/bin/../lib/gcc/x86_64-linux-gnu/8/../../../../include/c++/8/backward
+ /usr/include/clang/6.0.1/include
+ /usr/local/include
+ /usr/include/x86_64-linux-gnu
+ /usr/include
+End of search list.
+Linking CXX static library libcmTC_86829.a
+/opt/clion-2019.3/bin/cmake/linux/bin/cmake -P CMakeFiles/cmTC_86829.dir/cmake_clean_target.cmake
+/opt/clion-2019.3/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_86829.dir/link.txt --verbose=1
+/usr/bin/ar qc libcmTC_86829.a  CMakeFiles/cmTC_86829.dir/CMakeCXXCompilerABI.cpp.o
+/usr/bin/ranlib libcmTC_86829.a
+make[1]: Leaving directory '/home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+
+Parsed CXX implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/usr/bin/../lib/gcc/x86_64-linux-gnu/8/../../../../include/c++/8]
+    add: [/usr/bin/../lib/gcc/x86_64-linux-gnu/8/../../../../include/x86_64-linux-gnu/c++/8]
+    add: [/usr/bin/../lib/gcc/x86_64-linux-gnu/8/../../../../include/c++/8/backward]
+    add: [/usr/include/clang/6.0.1/include]
+    add: [/usr/local/include]
+    add: [/usr/include/x86_64-linux-gnu]
+    add: [/usr/include]
+  end of search list found
+  collapse include dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/8/../../../../include/c++/8] ==> [/usr/include/c++/8]
+  collapse include dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/8/../../../../include/x86_64-linux-gnu/c++/8] ==> [/usr/include/x86_64-linux-gnu/c++/8]
+  collapse include dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/8/../../../../include/c++/8/backward] ==> [/usr/include/c++/8/backward]
+  collapse include dir [/usr/include/clang/6.0.1/include] ==> [/usr/include/clang/6.0.1/include]
+  collapse include dir [/usr/local/include] ==> [/usr/local/include]
+  collapse include dir [/usr/include/x86_64-linux-gnu] ==> [/usr/include/x86_64-linux-gnu]
+  collapse include dir [/usr/include] ==> [/usr/include]
+  implicit include dirs: [/usr/include/c++/8;/usr/include/x86_64-linux-gnu/c++/8;/usr/include/c++/8/backward;/usr/include/clang/6.0.1/include;/usr/local/include;/usr/include/x86_64-linux-gnu;/usr/include]
+
+
+Parsed CXX implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/usr/bin/make cmTC_86829/fast && /usr/bin/make -f CMakeFiles/cmTC_86829.dir/build.make CMakeFiles/cmTC_86829.dir/build]
+  ignore line: [make[1]: Entering directory '/home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp']
+  ignore line: [Building CXX object CMakeFiles/cmTC_86829.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/usr/bin/clang-6.0    -v -o CMakeFiles/cmTC_86829.dir/CMakeCXXCompilerABI.cpp.o -c /opt/clion-2019.3/bin/cmake/linux/share/cmake-3.15/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [clang version 6.0.1-11 (tags/RELEASE_601/final)]
+  ignore line: [Target: x86_64-pc-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /usr/bin]
+  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/8]
+  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/9]
+  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/8]
+  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/9]
+  ignore line: [Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/8]
+  ignore line: [Candidate multilib: .]
+  ignore line: [@m64]
+  ignore line: [Selected multilib: .]
+  ignore line: [@m64]
+  ignore line: [ "/usr/lib/llvm-6.0/bin/clang" -cc1 -triple x86_64-pc-linux-gnu -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model static -mthread-model posix -mdisable-fp-elim -fmath-errno -masm-verbose -mconstructor-aliases -munwind-tables -fuse-init-array -target-cpu x86-64 -dwarf-column-info -debugger-tuning=gdb -v -coverage-notes-file /home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp/CMakeFiles/cmTC_86829.dir/CMakeCXXCompilerABI.cpp.gcno -resource-dir /usr/lib/llvm-6.0/lib/clang/6.0.1 -internal-isystem /usr/bin/../lib/gcc/x86_64-linux-gnu/8/../../../../include/c++/8 -internal-isystem /usr/bin/../lib/gcc/x86_64-linux-gnu/8/../../../../include/x86_64-linux-gnu/c++/8 -internal-isystem /usr/bin/../lib/gcc/x86_64-linux-gnu/8/../../../../include/x86_64-linux-gnu/c++/8 -internal-isystem /usr/bin/../lib/gcc/x86_64-linux-gnu/8/../../../../include/c++/8/backward -internal-isystem /usr/include/clang/6.0.1/include/ -internal-isystem /usr/local/include -internal-isystem /usr/lib/llvm-6.0/lib/clang/6.0.1/include -internal-externc-isystem /usr/include/x86_64-linux-gnu -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdeprecated-macro -fdebug-compilation-dir /home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp -ferror-limit 19 -fmessage-length 0 -fobjc-runtime=gcc -fcxx-exceptions -fexceptions -fdiagnostics-show-option -o CMakeFiles/cmTC_86829.dir/CMakeCXXCompilerABI.cpp.o -x c++ /opt/clion-2019.3/bin/cmake/linux/share/cmake-3.15/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [clang -cc1 version 6.0.1 based upon LLVM 6.0.1 default target x86_64-pc-linux-gnu]
+  ignore line: [ignoring nonexistent directory "/include"]
+  ignore line: [ignoring duplicate directory "/usr/bin/../lib/gcc/x86_64-linux-gnu/8/../../../../include/x86_64-linux-gnu/c++/8"]
+  ignore line: [ignoring duplicate directory "/usr/include/clang/6.0.1/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /usr/bin/../lib/gcc/x86_64-linux-gnu/8/../../../../include/c++/8]
+  ignore line: [ /usr/bin/../lib/gcc/x86_64-linux-gnu/8/../../../../include/x86_64-linux-gnu/c++/8]
+  ignore line: [ /usr/bin/../lib/gcc/x86_64-linux-gnu/8/../../../../include/c++/8/backward]
+  ignore line: [ /usr/include/clang/6.0.1/include]
+  ignore line: [ /usr/local/include]
+  ignore line: [ /usr/include/x86_64-linux-gnu]
+  ignore line: [ /usr/include]
+  ignore line: [End of search list.]
+  ignore line: [Linking CXX static library libcmTC_86829.a]
+  ignore line: [/opt/clion-2019.3/bin/cmake/linux/bin/cmake -P CMakeFiles/cmTC_86829.dir/cmake_clean_target.cmake]
+  ignore line: [/opt/clion-2019.3/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_86829.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/ar qc libcmTC_86829.a  CMakeFiles/cmTC_86829.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/usr/bin/ranlib libcmTC_86829.a]
+  ignore line: [make[1]: Leaving directory '/home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp']
+  ignore line: []
+  ignore line: []
+  implicit libs: []
+  implicit dirs: []
+  implicit fwks: []
+
+
+Determining if the include file pthread.h exists passed with the following output:
+Change Dir: /home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_bc8b4/fast && /usr/bin/make -f CMakeFiles/cmTC_bc8b4.dir/build.make CMakeFiles/cmTC_bc8b4.dir/build
+make[1]: Entering directory '/home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_bc8b4.dir/CheckIncludeFile.c.o
+/usr/bin/clang-6.0    -o CMakeFiles/cmTC_bc8b4.dir/CheckIncludeFile.c.o   -c /home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C static library libcmTC_bc8b4.a
+/opt/clion-2019.3/bin/cmake/linux/bin/cmake -P CMakeFiles/cmTC_bc8b4.dir/cmake_clean_target.cmake
+/opt/clion-2019.3/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bc8b4.dir/link.txt --verbose=1
+/usr/bin/ar qc libcmTC_bc8b4.a  CMakeFiles/cmTC_bc8b4.dir/CheckIncludeFile.c.o
+/usr/bin/ranlib libcmTC_bc8b4.a
+make[1]: Leaving directory '/home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+
+Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD succeeded with the following output:
+Change Dir: /home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_2606f/fast && /usr/bin/make -f CMakeFiles/cmTC_2606f.dir/build.make CMakeFiles/cmTC_2606f.dir/build
+make[1]: Entering directory '/home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_2606f.dir/src.c.o
+/usr/bin/clang-6.0   -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_2606f.dir/src.c.o   -c /home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp/src.c
+Linking C static library libcmTC_2606f.a
+/opt/clion-2019.3/bin/cmake/linux/bin/cmake -P CMakeFiles/cmTC_2606f.dir/cmake_clean_target.cmake
+/opt/clion-2019.3/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2606f.dir/link.txt --verbose=1
+/usr/bin/ar qc libcmTC_2606f.a  CMakeFiles/cmTC_2606f.dir/src.c.o
+/usr/bin/ranlib libcmTC_2606f.a
+make[1]: Leaving directory '/home/vagrant/FinalProject/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+#include <pthread.h>
+
+void* test_func(void* data)
+{
+  return data;
+}
+
+int main(void)
+{
+  pthread_t thread;
+  pthread_create(&thread, NULL, test_func, NULL);
+  pthread_detach(thread);
+  pthread_join(thread, NULL);
+  pthread_atfork(NULL, NULL, NULL);
+  pthread_exit(NULL);
+
+  return 0;
+}
+
+Checking whether the ASM_NASM compiler is NASM using "-v" matched "(NASM version)":
+NASM version 2.14

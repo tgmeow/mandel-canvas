@@ -1,0 +1,4 @@
+# Hashes of file build rules.
+4d48bf0729e120a014e1207e1d029061 CMakeFiles/mandel_service
+bd6760ca51d32b90e0fa84b0bbb6e5fc config.json.o
+befda858c9357e18ffd038db4440daad mandel.pb.h

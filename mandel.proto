@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+message MandelParams {
+    DoubleRect cb = 1;
+    IntRect ib = 2;
+    int32 zoom = 3;
+    int32 maxIter = 4;
+}
+
+message DoubleRect {
+    double xMin = 1;
+    double xMax = 2;
+    double yMin = 3;
+    double yMax = 4;
+}
+
+message IntRect {
+    int32 xMin = 1;
+    int32 xMax = 2;
+    int32 yMin = 3;
+    int32 yMax = 4;
+}
