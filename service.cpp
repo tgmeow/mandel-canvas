@@ -138,15 +138,17 @@ mandel::MandelResponse run_mandel_calc(const mandel::MandelRequest &mandReq) {
     mandRes.mutable_ib()->CopyFrom(mandReq.ib());
 
     // Computation vars
-    mandel::DoubleRect cb = mandelReq.cb();
-    double xRange = cb.xmax() - cb.xmin();
-    double yRange = cb.ymax() - cb.ymin();
+    double xRange = mandReq.cb().xmax() - mandReq.cb().xmin();
+    double yRange = mandReq.cb().ymax() - mandReq.cb().ymin();
+
     // Iterate over the rows/cols of ib and append to mandRes Data
     for (uint32_t x = mandReq.ib().xmin(); x < mandReq.ib().xmax(); ++x) {
         for (uint32_t y = mandReq.ib().ymin(); y < mandReq.ib().ymax(); ++y) {
-            double ptX = cb.xmin() + (double)x * xRange / (double) mandReq.view_width();
-            double ptY = cb.ymin() + (double)y * yRange / (double) mandReq.view_height();
+
+            double ptX = mandReq.cb().xmin() + ((double)x) * xRange / ((double) mandReq.view_width());
+            double ptY = mandReq.cb().ymin() + ((double)y) * yRange / ((double) mandReq.view_height());
             uint32_t iters = iterations_at_point(ptX, ptY, mandReq.max_iter());
+
             // Add pixel to the response.
             mandel::MandelPixel *mp = mandRes.add_data();
             mp->set_num_iter(iters);
@@ -163,7 +165,7 @@ uint32_t iterations_at_point(double x, double y, uint32_t max_iter) {
     uint32_t iter = 0;
     for (; (x2+y2 <= 4) && (iter < max_iter); ++iter) {
         double x_tmp = x2-y2+x0;
-        y = 2*x*y+y0;
+        y = 2.0*x*y+y0;
         x = x_tmp;
         x2 = x*x;
         y2 = y*y;
