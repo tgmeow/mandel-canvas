@@ -2,7 +2,7 @@ syntax = "proto3";
 package mandel;
 
 message MandelPixel {
-    int32 num_iter = 1;
+    uint32 num_iter = 1;
 }
 
 message DoubleRect {
@@ -28,7 +28,7 @@ message MandelRequest {
     IntRect ib = 2;
 
     // Tells the computation when to stop
-    int32 max_iter = 3;
+    uint32 max_iter = 3;
 
     // Dimensions of the image viewport
     int32 view_width = 6;
