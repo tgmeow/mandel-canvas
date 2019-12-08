@@ -4,13 +4,25 @@ const protobuf = require("protobufjs");
 const morgan = require('morgan');
 const express = require('express');
 
-// Unikernel address
-// const MANDEL_IP = '34.70.125.180'; // instance-17 // normal working/
-const MANDEL_IPS = ['34.70.125.180', '104.196.109.6', '34.73.0.188'];
-const numOfUnikernels = MANDEL_IPS.length;
-const MANDEL_PORT = 80;
+// GET IP BEGIN
+const Compute = require('@google-cloud/compute');
+const compute = new Compute({projectId: 'tigertmp',});
+const zone = compute.zone('us-east1-b');
+const instanceGroup = zone.instanceGroup('mandel-private-group');
 
-const port = 8080; // Node server port
+const updateDelay = 10*1000;
+const updatesKeepAlive = 2; // number of updates after the last request
+let numUpdates = 0;
+let updateIPs = true;
+// TODO the ip updater gets the PRIVATE ip addresses.
+let MANDEL_IPS = ['34.70.125.180', '104.196.109.6', '34.73.0.188'];
+const MANDEL_PORT = 80;
+let updateRunner = undefined;
+// GET IP END
+
+// const MANDEL_IPS = ['34.70.125.180', '104.196.109.6', '34.73.0.188'];
+
+const port = 80; // Node server port
 
 const app = express();
 app.use(morgan('dev'));
@@ -74,6 +86,8 @@ protobuf.load("mandel.proto", (err, root) => {
  * @returns {Promise<void>}
  */
 async function handlePostRoot(req, res) {
+  pokeUpdater(); // poke the mandel ip updater so we have fresh IP addresses.
+
   // Process the incoming request and try to extract the protobuf message.
   let incomingMandReq = readProtoReq(req);
 
@@ -93,7 +107,7 @@ async function handlePostRoot(req, res) {
     verifyMandReq(cur_request);
     // Turn broken up request back into buffers
     let unikBuffer = mandel.MandelRequest.encode(cur_request).finish();
-    let cur_index = i % numOfUnikernels;
+    let cur_index = i % MANDEL_IPS.length;
     let cur_res = runMandelComputation(MANDEL_IPS[cur_index], MANDEL_PORT, unikBuffer);
     responses.push(cur_res);
   }
@@ -181,4 +195,33 @@ async function runMandelComputation(ip, port, buffer) {
     throw Error("MandelResponse verify failed.");
   }
   return mandel.MandelResponse.decode(result);
+}
+
+// getIPs(instanceGroup);
+
+async function getUpdatedIPs() {
+  if(numUpdates <= 0) {
+    updateIPs = false;
+  }
+  if (!updateIPs) {
+    clearInterval(updateRunner);
+    updateRunner = undefined;
+    return;
+  }
+  numUpdates--;
+  let groupVMs = await instanceGroup.getVMs({running:true});
+  let vmArr = groupVMs[0];
+  let vmMetasPromises = vmArr.map(vm => vm.getMetadata());
+  let vmMetas = await Promise.all(vmMetasPromises);
+  // console.log(vmMetas.length);
+  MANDEL_IPS = vmMetas.map(vm => vm[0].networkInterfaces[0].networkIP);
+  console.log(MANDEL_IPS);
+}
+
+function pokeUpdater(){
+  numUpdates = updatesKeepAlive; // reset numUpdates
+  // Start runner if it is not already running.
+  if (updateRunner === undefined) {
+    updateRunner = setInterval(getUpdatedIPs, updateDelay);
+  }
 }

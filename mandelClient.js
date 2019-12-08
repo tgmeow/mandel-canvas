@@ -30,7 +30,7 @@ MandelClient.sendAsyncRequest = function (ip, port, buffer, timeout = 2000) {
           socket.destroy();
         });
         networker.init();
-        console.log('Sending Buffer.');
+        // console.log('Sending Buffer.');
         networker.send(buffer);
       }).on('timeout', () => {
         // console.log("FAIL: Socket connection timeout.");
