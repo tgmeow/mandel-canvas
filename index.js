@@ -22,7 +22,7 @@ protobuf.load("mandel.proto", async (err, root) => {
   IntRect = root.lookupType("mandel.IntRect");
   DoubleRect = root.lookupType("mandel.DoubleRect");
 
-  // Note: Not necessary to create into Message type.
+  // Note: Not necessary to create nested things into Message type.
   let dims = 10;
   let ib = IntRect.create({xmin: 0, xmax: dims, ymin:0, ymax:dims});
   let cb = DoubleRect.create({xmin: -1.5, xmax: 1, ymin:-1, ymax:1});
@@ -35,7 +35,8 @@ protobuf.load("mandel.proto", async (err, root) => {
   console.log(MandelRequest.decode(buffer));
 
   // Send the request, get response, and parse message.
-  let mandRes = await runMandelComputation(MANDEL_IP, MANDEL_PORT, buffer);
+  let test = Buffer.from([0]);
+  let mandRes = await runMandelComputation(MANDEL_IP, MANDEL_PORT, test);
   console.log(mandRes.data);
 });
 

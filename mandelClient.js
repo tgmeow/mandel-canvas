@@ -11,6 +11,7 @@ let MandelClient = {};
 
 /**
  * Sends a buffer to a unikernel and resolves the Promise with the response.
+ * Currently DOES NOT reuse the socket.
  * @param ip
  * @param port
  * @param buffer

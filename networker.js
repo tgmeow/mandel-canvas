@@ -1,4 +1,5 @@
 // Copied from https://gist.github.com/anonymous/e9e87ba3947900869022650d673724f7#file-networker-js
+// Then modified slightly to work with my Unikernel implementation.
 'use strict';
 
 const debug = require('debug')('network');
@@ -17,6 +18,7 @@ function Networker(socket, handler) {
     this.handler = handler;
 }
 
+// TODO: May not be efficient with reusing connections. But at least it's working.
 Networker.prototype.init = function () {
     this.socket.on('data', (data) => {
         if (!this.sent) {
@@ -27,8 +29,8 @@ Networker.prototype.init = function () {
         }
         this._bufferedBytes += data.length;
         this.queue.push(data);
-        // console.log('PUSH DATA');
-        // console.log(data);
+        console.log('PUSH DATA');
+        console.log(data);
 
         this._process = true;
         this._onData();
