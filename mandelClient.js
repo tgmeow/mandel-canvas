@@ -35,7 +35,7 @@ MandelClient.sendAsyncRequest = function (ip, port, buffer, timeout = 2000) {
       }).on('timeout', () => {
         // console.log("FAIL: Socket connection timeout.");
         socket.destroy();
-        rej();
+        rej(new Error("Timeout connecting to unikernel."));
         clearTimeout(timer);
       }).on('error', err => {
         console.log(err);
