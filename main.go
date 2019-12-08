@@ -24,9 +24,10 @@ func main() {
 		MaxIter: 100, ViewWidth: 10, ViewHeight: 10,
 	}
 	computation, err := computeMandelCloud(mandReq)
+	log.Println(computation)
 	if err != nil {
 		// TODO handle error
-		log.Panic("Compute Mandel Cloud failed: ", err)
+		//log.Panic("Compute Mandel Cloud failed: ", err)
 	}
 	log.Println(computation)
 }
@@ -39,7 +40,17 @@ func computeMandelCloud(mandReq *mandel.MandelRequest) (*mandel.MandelResponse, 
 	}
 	//log.Println("Sending Request...", data)
 	// Create and Send POST request to the remote
-	resp, err := http.Post(MandelUrl, "application/octet-stream", bytes.NewBuffer(data))
+	req, err := http.NewRequest("POST", MandelUrl, bytes.NewBuffer(data))
+	if err != nil {
+		return nil, err
+	}
+	// Set headers. octet-stream is REQUIRED. keep alive to try to reuse requests.
+	req.Header.Set("Content-Type", "application/octet-stream")
+	req.Header.Set("Connection", "Keep-Alive")
+	req.Header.Set("Keep-Alive", "timeout=60, max=1000")
+
+	// Send the http request.
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
