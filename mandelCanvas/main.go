@@ -8,7 +8,7 @@ func newGameWidget() *gameWidget {
 	return &gameWidget{
 		xCenter:    -0.5,
 		zoom:       0,
-		origHeight: 512,
+		origHeight: 100,
 		nThreads:   128,
 	}
 }

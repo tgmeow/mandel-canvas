@@ -71,7 +71,8 @@ func (g *gameRenderer) draw(w, h int) image.Image {
 		// Create a new image of the correct size
 		ib := image.Rect(0, 0, w, h)
 		g.img = image.NewNRGBA(ib)
-		computeImage64(g.img, &cb, []*image.Rectangle{&ib}, g.gw.nThreads)
+		computeImage64Cloud(g.img, &cb, []*image.Rectangle{&ib})
+		//local app: computeImage64(g.img, &cb, []*image.Rectangle{&ib}, g.gw.nThreads)
 		// Reset drag vars. Drag will have been already calculated in the full redraw, making it not necessary.
 		g.gw.drag = image.Point{}
 		return g.img
@@ -82,7 +83,8 @@ func (g *gameRenderer) draw(w, h int) image.Image {
 
 	// Redraw dirty parts
 	dirtyRects := g.calcDirtyRectangles()
-	computeImage64(g.img, &cb, dirtyRects, g.gw.nThreads)
+	computeImage64Cloud(g.img, &cb, dirtyRects)
+	//local app: computeImage64(g.img, &cb, dirtyRects, g.gw.nThreads)
 	// Reset drag vars for next draw
 	g.gw.drag = image.Point{}
 

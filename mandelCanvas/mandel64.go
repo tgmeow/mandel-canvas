@@ -5,6 +5,7 @@ import (
 	deferredTicToc "github.com/tgmeow/deferred-tic-toc"
 	"image"
 	"image/color"
+	"log"
 	"math"
 	"sync"
 )
@@ -142,4 +143,41 @@ func computeImage64(img *image.NRGBA, cb *ComputeBounds64, ibA []*image.Rectangl
 		}
 	}
 	wg.Wait()
+}
+
+// Prepare the request to compute the image. //Splits into rows. ib determines what bounds to draw at.
+func computeImage64Cloud(img *image.NRGBA, cb *ComputeBounds64, ibA []*image.Rectangle) {
+	defer deferredTicToc.TicToc("computeImage")()
+	var wg sync.WaitGroup
+	for r := 0; r < len(ibA); r++ {
+		wg.Add(1)
+		go computeImageCloudWorker(&wg, img, cb, ibA[r])
+	}
+	wg.Wait()
+}
+
+func computeImageCloudWorker(wg *sync.WaitGroup, img *image.NRGBA, cb *ComputeBounds64, ib *image.Rectangle) {
+	defer wg.Done()
+	imgBounds := img.Bounds()
+	response, err := makeRequest(cb, ib, &imgBounds)
+
+	if err == nil {
+		//log.Println(len(response.Data))
+	}
+	if err != nil {
+		log.Println(err)
+		// TODO error handling
+		return
+	}
+
+	iterCount := 0
+	for row := response.Ib.Ymin; row < response.Ib.Ymax; row++ {
+		for col := response.Ib.Xmin; col < response.Ib.Xmax; col++ {
+			//log.Println(int(row), int(col))
+			c :=iterationToColor64(int(response.Data[iterCount].NumIter), cb.maxIter)
+
+			img.Set(int(col), int(row), c)
+			iterCount++
+		}
+	}
 }
