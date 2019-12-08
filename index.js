@@ -35,8 +35,8 @@ protobuf.load("mandel.proto", async (err, root) => {
   console.log(MandelRequest.decode(buffer));
 
   // Send the request, get response, and parse message.
-  let test = Buffer.from([0]);
-  let mandRes = await runMandelComputation(MANDEL_IP, MANDEL_PORT, test);
+  // let test = Buffer.from([0]);
+  let mandRes = await runMandelComputation(MANDEL_IP, MANDEL_PORT, buffer);
   console.log(mandRes.data);
 });
 

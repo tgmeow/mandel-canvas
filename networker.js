@@ -29,8 +29,8 @@ Networker.prototype.init = function () {
         }
         this._bufferedBytes += data.length;
         this.queue.push(data);
-        console.log('PUSH DATA');
-        console.log(data);
+        // console.log('PUSH DATA');
+        // console.log(data);
 
         this._process = true;
         this._onData();
