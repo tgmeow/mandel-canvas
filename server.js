@@ -74,6 +74,8 @@ protobuf.load("mandel.proto", (err, root) => {
 
   const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
+  pokeUpdater();
+  
   // Keeps client connections open for longer
   server.keepAliveTimeout = 60 * 1000;
   server.headersTimeout = 65 * 1000;
@@ -215,7 +217,7 @@ async function getUpdatedIPs() {
   let vmMetas = await Promise.all(vmMetasPromises);
   // console.log(vmMetas.length);
   MANDEL_IPS = vmMetas.map(vm => vm[0].networkInterfaces[0].networkIP);
-  console.log(MANDEL_IPS);
+  console.log("Number of Unikernel IPs: ", MANDEL_IPS.length);
 }
 
 function pokeUpdater(){
