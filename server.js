@@ -103,8 +103,8 @@ async function handlePostRoot(req, res) {
 
   // split to number of requests equal to number of servers
   for (let i = 0; i < numSplits; i++) {
-    let splitMin = min + i * range / numSplits;
-    let splitMax = Math.min(min + (i + 1) * range / numSplits, max);
+    let splitMin = Math.round(min + i * range / numSplits);
+    let splitMax = Math.round(Math.min(min + (i + 1) * range / numSplits, max));
     let cur_request = {
       cb: incomingMandReq.cb,
       ib: {xmin: incomingMandReq.ib.xmin, xmax: incomingMandReq.ib.xmax, ymin: splitMin, ymax: splitMax},
