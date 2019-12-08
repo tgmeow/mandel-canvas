@@ -12,10 +12,10 @@ import (
 
 var client = &http.Client{}
 
-const MandelUrl = "http://localhost:8080"
+const MandelUrl = "http://104.196.204.230:80"
 
 func main() {
-	var dims int32 = 10
+	var dims int32 = 100
 	cb := &mandel.DoubleRect{Xmin: -1.5, Xmax: 1, Ymin: -1, Ymax: 1,}
 	ib := &mandel.IntRect{Xmin: 0, Xmax: dims, Ymin: 0, Ymax: dims,}
 
@@ -29,7 +29,6 @@ func main() {
 		// TODO handle error
 		//log.Panic("Compute Mandel Cloud failed: ", err)
 	}
-	log.Println(computation)
 }
 
 // Turns the MandelRequest into a MandelResponse by asking the cloud nicely
