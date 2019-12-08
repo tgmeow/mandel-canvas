@@ -14,8 +14,8 @@ const updateDelay = 10*1000;
 const updatesKeepAlive = 2; // number of updates after the last request
 let numUpdates = 0;
 let updateIPs = true;
-// TODO the ip updater gets the PRIVATE ip addresses.
-let MANDEL_IPS = ['34.70.125.180', '104.196.109.6', '34.73.0.188'];
+let MANDEL_IPS = ['34.70.125.180']; // one public ip address to help initialize the connection
+let lastUsedIndex = 0;
 const MANDEL_PORT = 80;
 let updateRunner = undefined;
 // GET IP END
@@ -75,7 +75,7 @@ protobuf.load("mandel.proto", (err, root) => {
   const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
   pokeUpdater();
-  
+
   // Keeps client connections open for longer
   server.keepAliveTimeout = 60 * 1000;
   server.headersTimeout = 65 * 1000;
@@ -109,7 +109,8 @@ async function handlePostRoot(req, res) {
     verifyMandReq(cur_request);
     // Turn broken up request back into buffers
     let unikBuffer = mandel.MandelRequest.encode(cur_request).finish();
-    let cur_index = i % MANDEL_IPS.length;
+    let cur_index = (i+lastUsedIndex) % MANDEL_IPS.length;
+    lastUsedIndex = (lastUsedIndex+1) % MANDEL_IPS.length; // cycle across requests.
     let cur_res = runMandelComputation(MANDEL_IPS[cur_index], MANDEL_PORT, unikBuffer);
     responses.push(cur_res);
   }
@@ -190,7 +191,7 @@ function verifyMandelRes(mandRes) {
  * @returns {Promise<Message<{}>>}
  */
 async function runMandelComputation(ip, port, buffer) {
-  let timeout = 4000;
+  let timeout = 1000;
   let result = await MandelClient.sendAsyncRequest(ip, port, buffer, timeout);
   let errMsg = mandel.MandelResponse.verify(result);
   if (errMsg) {
@@ -217,13 +218,30 @@ async function getUpdatedIPs() {
   let vmMetas = await Promise.all(vmMetasPromises);
   // console.log(vmMetas.length);
   MANDEL_IPS = vmMetas.map(vm => vm[0].networkInterfaces[0].networkIP);
+  shuffle(MANDEL_IPS); // Put in random order to help balance some of the load.
   console.log("Number of Unikernel IPs: ", MANDEL_IPS.length);
 }
 
 function pokeUpdater(){
+  updateIPs = true;
   numUpdates = updatesKeepAlive; // reset numUpdates
   // Start runner if it is not already running.
   if (updateRunner === undefined) {
     updateRunner = setInterval(getUpdatedIPs, updateDelay);
   }
+}
+
+/**
+ * Shuffles array in place.
+ * @param {Array} a items An array containing the items.
+ */
+function shuffle(a) {
+  var j, x, i;
+  for (i = a.length - 1; i > 0; i--) {
+    j = Math.floor(Math.random() * (i + 1));
+    x = a[i];
+    a[i] = a[j];
+    a[j] = x;
+  }
+  return a;
 }
