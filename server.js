@@ -10,7 +10,7 @@ const compute = new Compute({projectId: 'tigertmp',});
 const zone = compute.zone('us-east1-b');
 const instanceGroup = zone.instanceGroup('mandel-private-group');
 
-const updateDelay = 10*1000;
+const updateDelay = 10 * 1000;
 const updatesKeepAlive = 2; // number of updates after the last request
 let numUpdates = 0;
 let updateIPs = true;
@@ -96,12 +96,18 @@ async function handlePostRoot(req, res) {
   // break up request and send to multiple unikernels.
   let min = incomingMandReq.ib.ymin;
   let max = incomingMandReq.ib.ymax;
+  let range = max - min;
   let responses = [];
 
-  for (let i = min; i < max; i++) {
+  let numSplits = Math.min(max - min, MANDEL_IPS.length);
+
+  // split to number of requests equal to number of servers
+  for (let i = 0; i < numSplits; i++) {
+    let splitMin = min + i * range / numSplits;
+    let splitMax = Math.min(min + (i + 1) * range / numSplits, max);
     let cur_request = {
       cb: incomingMandReq.cb,
-      ib: {xmin: incomingMandReq.ib.xmin, xmax: incomingMandReq.ib.xmax, ymin: i, ymax: i + 1},
+      ib: {xmin: incomingMandReq.ib.xmin, xmax: incomingMandReq.ib.xmax, ymin: splitMin, ymax: splitMax},
       maxIter: incomingMandReq.maxIter,
       viewWidth: incomingMandReq.viewWidth,
       viewHeight: incomingMandReq.viewHeight
@@ -109,11 +115,11 @@ async function handlePostRoot(req, res) {
     verifyMandReq(cur_request);
     // Turn broken up request back into buffers
     let unikBuffer = mandel.MandelRequest.encode(cur_request).finish();
-    let cur_index = (i+lastUsedIndex) % MANDEL_IPS.length;
-    lastUsedIndex = (lastUsedIndex+1) % MANDEL_IPS.length; // cycle across requests.
+    let cur_index = (i + lastUsedIndex) % MANDEL_IPS.length;
     let cur_res = runMandelComputation(MANDEL_IPS[cur_index], MANDEL_PORT, unikBuffer);
     responses.push(cur_res);
   }
+  lastUsedIndex = (lastUsedIndex + numSplits) % MANDEL_IPS.length; // cycle across requests.
   // Send request to unikernel(s) and await all
   let finishedMandRes = await Promise.all(responses);
 
@@ -203,7 +209,7 @@ async function runMandelComputation(ip, port, buffer) {
 // getIPs(instanceGroup);
 
 async function getUpdatedIPs() {
-  if(numUpdates <= 0) {
+  if (numUpdates <= 0) {
     updateIPs = false;
   }
   if (!updateIPs) {
@@ -212,7 +218,7 @@ async function getUpdatedIPs() {
     return;
   }
   numUpdates--;
-  let groupVMs = await instanceGroup.getVMs({running:true});
+  let groupVMs = await instanceGroup.getVMs({running: true});
   let vmArr = groupVMs[0];
   let vmMetasPromises = vmArr.map(vm => vm.getMetadata());
   let vmMetas = await Promise.all(vmMetasPromises);
@@ -222,7 +228,7 @@ async function getUpdatedIPs() {
   console.log("Number of Unikernel IPs: ", MANDEL_IPS.length);
 }
 
-function pokeUpdater(){
+function pokeUpdater() {
   updateIPs = true;
   numUpdates = updatesKeepAlive; // reset numUpdates
   // Start runner if it is not already running.
