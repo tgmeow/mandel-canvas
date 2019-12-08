@@ -5,7 +5,9 @@ const morgan = require('morgan');
 const express = require('express');
 
 // Unikernel address
-const MANDEL_IP = '34.70.125.180'; // instance-17 // normal working
+// const MANDEL_IP = '34.70.125.180'; // instance-17 // normal working/
+const MANDEL_IPS = ['34.70.125.180', '104.196.109.6', '34.73.0.188'];
+const numOfUnikernels = MANDEL_IPS.length;
 const MANDEL_PORT = 80;
 
 const port = 8080; // Node server port
@@ -17,14 +19,14 @@ app.use(morgan('dev'));
 let mandel = {};
 
 // custom body parser for protobuf type
-app.use(function(req, res, next) {
-  if(!req.is('application/octet-stream')) return next();
+app.use(function (req, res, next) {
+  if (!req.is('application/octet-stream')) return next();
   var data = [];
   req.on('data', chunk => {
     data.push(chunk);
   });
   req.on('end', () => {
-    if(data.length <= 0) return next();
+    if (data.length <= 0) return next();
     data = Buffer.concat(data);
     // console.log('Received buffer', data);
     req.raw = data;
@@ -61,8 +63,8 @@ protobuf.load("mandel.proto", (err, root) => {
   const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
   // Keeps client connections open for longer
-  server.keepAliveTimeout = 60*1000;
-  server.headersTimeout = 65*1000;
+  server.keepAliveTimeout = 60 * 1000;
+  server.headersTimeout = 65 * 1000;
 });
 
 /**
@@ -75,24 +77,40 @@ async function handlePostRoot(req, res) {
   // Process the incoming request and try to extract the protobuf message.
   let incomingMandReq = readProtoReq(req);
 
-  // TODO break up request and send to multiple unikernels.
-  let brokenUpMandReq = incomingMandReq;
+  // break up request and send to multiple unikernels.
+  let min = incomingMandReq.ib.ymin;
+  let max = incomingMandReq.ib.ymax;
+  let responses = [];
 
-  // Note: Not necessary to create nested things into Message type.
-  // let dims = 10;
-  // let ib = IntRect.create({xmin: 0, xmax: dims, ymin:0, ymax:dims});
-  // let cb = DoubleRect.create({xmin: -1.5, xmax: 1, ymin:-1, ymax:1});
-  // let paramsPayload = {ib, cb, maxIter:100, viewWidth: dims, viewHeight:dims};
-
-  // TODO Turn broken up request back into buffers
-  verifyMandReq(brokenUpMandReq);
-  let unikBuffer = mandel.MandelRequest.encode(brokenUpMandReq).finish();
-
+  for (let i = min; i < max; i++) {
+    let cur_request = {
+      cb: incomingMandReq.cb,
+      ib: {xmin: incomingMandReq.ib.xmin, xmax: incomingMandReq.ib.xmax, ymin: i, ymax: i + 1},
+      maxIter: incomingMandReq.maxIter,
+      viewWidth: incomingMandReq.viewWidth,
+      viewHeight: incomingMandReq.viewHeight
+    };
+    verifyMandReq(cur_request);
+    // Turn broken up request back into buffers
+    let unikBuffer = mandel.MandelRequest.encode(cur_request).finish();
+    let cur_index = i % numOfUnikernels;
+    let cur_res = runMandelComputation(MANDEL_IPS[cur_index], MANDEL_PORT, unikBuffer);
+    responses.push(cur_res);
+  }
   // Send request to unikernel(s) and await all
-  let unikMandRes = await runMandelComputation(MANDEL_IP, MANDEL_PORT, unikBuffer);
+  let finishedMandRes = await Promise.all(responses);
 
-  // TODO Process responses and turn MandelResponses into one big response.
+  // Process responses and turn MandelResponses into one big response.
   // Since the request should be a rectangle, we will put the pieces back into one long data array.
+  let data = [];
+  finishedMandRes.forEach(d => {
+    data = data.concat(d.data);
+  });
+
+  let unikMandRes = {
+    data: data,
+    ib: incomingMandReq.ib
+  };
 
   // Send back the mandel response.
   sendProtoRes(res, unikMandRes);
