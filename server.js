@@ -63,6 +63,12 @@ protobuf.load("mandel.proto", (err, root) => {
     handlePostRoot(req, res).catch(err => next(err));
   });
 
+  // Reroute GET to the github URL
+  app.get('*', (req, res, next) => {
+    res.redirect("https://github.com/tgmeow/mandel-canvas");
+    next();
+  });
+
   // Error handler
   app.use((err, req, res, next) => {
     if (res.headersSent) {
@@ -105,6 +111,7 @@ async function handlePostRoot(req, res) {
   for (let i = 0; i < numSplits; i++) {
     let splitMin = Math.round(min + i * range / numSplits);
     let splitMax = Math.round(Math.min(min + (i + 1) * range / numSplits, max));
+
     let cur_request = {
       cb: incomingMandReq.cb,
       ib: {xmin: incomingMandReq.ib.xmin, xmax: incomingMandReq.ib.xmax, ymin: splitMin, ymax: splitMax},
@@ -197,7 +204,7 @@ function verifyMandelRes(mandRes) {
  * @returns {Promise<Message<{}>>}
  */
 async function runMandelComputation(ip, port, buffer) {
-  let timeout = 1000;
+  let timeout = 750;
   let result = await MandelClient.sendAsyncRequest(ip, port, buffer, timeout);
   let errMsg = mandel.MandelResponse.verify(result);
   if (errMsg) {
