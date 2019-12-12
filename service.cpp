@@ -30,21 +30,6 @@ struct my_device {
     int i = 0;
 };
 
-std::string HTML_RESPONSE() {
-    // Generate some HTML
-    std::stringstream stream;
-    stream << "<!DOCTYPE html><html><head>"
-           << "<link href='https://fonts.googleapis.com/css?family=Ubuntu:500,300'"
-           << " rel='stylesheet' type='text/css'>"
-           << "<title>IncludeOS Demo Service</title></head><body>"
-           << "<h2>The C++ Unikernel</h2>"
-           << "<p>You have successfully booted an IncludeOS TCP service with simple http. "
-           << "For a more sophisticated example, take a look at "
-           << "<a href='https://github.com/hioa-cs/IncludeOS/tree/master/examples/acorn'>Acorn</a>.</p>"
-           << "<footer><hr/>&copy; 2017 IncludeOS </footer></body></html>";
-
-    return stream.str();
-}
 
 void Service::start() {
     //---------------------------------------------------------------------------
@@ -62,7 +47,7 @@ void Service::start() {
 }
 
 /**
- * Starts the mandel http service
+ * Starts the mandel http service. Note that this uses the IncludeOS custom http code.
  */
 void start_http_service() {
     printf("Service started\n");
@@ -142,8 +127,8 @@ mandel::MandelResponse run_mandel_calc(const mandel::MandelRequest &mandReq) {
     double yRange = mandReq.cb().ymax() - mandReq.cb().ymin();
 
     // Iterate over the rows/cols of ib and append to mandRes Data
-    for (uint32_t x = mandReq.ib().xmin(); x < mandReq.ib().xmax(); ++x) {
-        for (uint32_t y = mandReq.ib().ymin(); y < mandReq.ib().ymax(); ++y) {
+    for (uint32_t y = mandReq.ib().ymin(); y < mandReq.ib().ymax(); ++y) {
+        for (uint32_t x = mandReq.ib().xmin(); x < mandReq.ib().xmax(); ++x) {
 
             double ptX = mandReq.cb().xmin() + ((double)x) * xRange / ((double) mandReq.view_width());
             double ptY = mandReq.cb().ymin() + ((double)y) * yRange / ((double) mandReq.view_height());
