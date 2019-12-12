@@ -62,6 +62,11 @@ protobuf.load("mandel.proto", (err, root) => {
   app.post('/', (req, res, next) => {
     handlePostRoot(req, res).catch(err => next(err));
   });
+  
+  app.get('*', (req, res, next) => {
+    res.redirect("https://github.com/tgmeow/mandel-canvas");
+    next();
+  });
 
   // Error handler
   app.use((err, req, res, next) => {
@@ -197,7 +202,7 @@ function verifyMandelRes(mandRes) {
  * @returns {Promise<Message<{}>>}
  */
 async function runMandelComputation(ip, port, buffer) {
-  let timeout = 1000;
+  let timeout = 1000; // maximum hiccup lag before responding with help im dead
   let result = await MandelClient.sendAsyncRequest(ip, port, buffer, timeout);
   let errMsg = mandel.MandelResponse.verify(result);
   if (errMsg) {
@@ -233,6 +238,7 @@ function pokeUpdater() {
   numUpdates = updatesKeepAlive; // reset numUpdates
   // Start runner if it is not already running.
   if (updateRunner === undefined) {
+    getUpdatedIPs(); // call NOW since setInterval starts after the interval.
     updateRunner = setInterval(getUpdatedIPs, updateDelay);
   }
 }

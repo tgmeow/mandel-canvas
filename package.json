@@ -13,7 +13,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "export GOOGLE_APPLICATION_CREDENTIALS='/home/tgmeow16/mandel-server/secrets/TigerTmp-48e2daa01a81.json' && node server.js"
   },
   "author": "",
   "license": "ISC"
