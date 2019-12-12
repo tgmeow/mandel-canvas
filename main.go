@@ -4,6 +4,7 @@ import (
 	"./mandel"
 	"bytes"
 	"github.com/golang/protobuf/proto"
+	"github.com/tgmeow/deferred-tic-toc"
 	"github.com/pkg/errors"
 	"io/ioutil"
 	"log"
@@ -15,7 +16,7 @@ var client = &http.Client{}
 const MandelUrl = "http://104.196.204.230:80"
 
 func main() {
-	var dims int32 = 100
+	var dims int32 = 1000
 	cb := &mandel.DoubleRect{Xmin: -1.5, Xmax: 1, Ymin: -1, Ymax: 1,}
 	ib := &mandel.IntRect{Xmin: 0, Xmax: dims, Ymin: 0, Ymax: dims,}
 
@@ -24,7 +25,8 @@ func main() {
 		MaxIter: 100, ViewWidth: 10, ViewHeight: 10,
 	}
 	computation, err := computeMandelCloud(mandReq)
-	log.Println(computation)
+	log.Println("done")
+	log.Println(len(computation.Data))
 	if err != nil {
 		// TODO handle error
 		//log.Panic("Compute Mandel Cloud failed: ", err)
@@ -33,6 +35,7 @@ func main() {
 
 // Turns the MandelRequest into a MandelResponse by asking the cloud nicely
 func computeMandelCloud(mandReq *mandel.MandelRequest) (*mandel.MandelResponse, error) {
+    defer deferredTicToc.TicToc("computeMandelCloud")()
 	data, err := marshallMandelRequest(mandReq)
 	if err != nil {
 		return nil, err
