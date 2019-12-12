@@ -1,24 +1,11 @@
-Mandel Canvas
-==============
-Go (golang) project using the Fyne framework to create an interactive canvas for viewing the Mandelbrot Set.
- The computation runs in multiple threads (go routines) to speed up the render. 
+# Mandel Canvas Mono-repo
+This repo contains all the code for running the Mandelbrot Viewer and the cloud backend version.   
 
-Building and Running
---------
-See [Releases](https://github.com/tgmeow/mandel-canvas/releases) for the latest official builds.
-_________________
-You can also build from source easily.
-1. Install Go
-2. ```go get fyne.io/fyne/...```
-3. ```git clone https://github.com/tgmeow/mandel-canvas```
-4. ```cd mandel-canvas/mandelCanvas```
-5. ```go build```
+## Folder Description
+- mandelCanvas - Interactive Go client. Can be found in the [Releases](https://github.com/tgmeow/mandel-canvas/releases). Can use local computation or unikernel computation through the node server.   
+- mandel - Non-interactive command line program that computes a mandelbrot image locally and saves it to a file.  
+- unikernel-mandel - Contains the IncludeOS unikernel that runs the mandelbrot computation.   
+- mandel-server - nodejs server that forwards MandelRequest data to unikernel backends.   
+- mandel-go-function-tester - Script to test the performance of the node server and unikernel backend.   
 
 
-Controls
----------
- As of v1.1, only enabled mouse controls are implemented.
- - Scroll Zoom
- - Click and drag
- - Right click - Print image config to the console
- 
