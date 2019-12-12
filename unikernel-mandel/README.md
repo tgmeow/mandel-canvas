@@ -1,6 +1,8 @@
-### Mandelbrot unikernal service
+# Mandelbrot unikernal service
 
-This service is to test our build of the protobuf runtime library, therefore it can only be built if [IncludeOS](https://github.com/includeos/includeos) was installed with the `libprotobuf` option set to `ON`.
+This service listens on port 80 TCP for a MandelRequest and responds with a MandelResponse.   
+
+It also uses the protobuf runtime library, therefore it can only be built if [IncludeOS](https://github.com/includeos/includeos) was installed with the `libprotobuf` option set to `ON`.
 
 
 __Add the bincrafters remote__
@@ -32,3 +34,13 @@ __Verify remotes:__
   boot --create-bridge mandel_service
   source deactivate.sh
 ```
+
+### Running in Google Cloud
+https://www.includeos.org/blog/2017/includeos-on-google-compute-engine.html   
+After building mandel_service...
+```bash
+boot -b -g mandel_service # attaches grub
+mv mandel_service.grub.img disk.raw # Google Cloud expects a 'disk.raw' file
+tar -zcf mandel_service.tar.gz disk.raw
+```
+Then upload this to a bucket in Google Cloud and then create an image from file in bucket.
