@@ -1,4 +1,4 @@
-### Test service for Google's protobuf runtime library
+### Mandelbrot unikernal service
 
 This service is to test our build of the protobuf runtime library, therefore it can only be built if [IncludeOS](https://github.com/includeos/includeos) was installed with the `libprotobuf` option set to `ON`.
 
@@ -22,13 +22,13 @@ __Verify remotes:__
 
 ### Build and run service
 
-```
+```bash
   mkdir build
   cd build
-  conan install .. -pr <profile-name>
+  conan install .. -pr clang-6.0-linux-x86_64
   source activate.sh
   cmake ..
   cmake --build .
-  boot protobuf_test_service
+  boot --create-bridge mandel_service
   source deactivate.sh
 ```
