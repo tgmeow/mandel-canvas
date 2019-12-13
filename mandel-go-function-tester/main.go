@@ -9,6 +9,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
+	"time"
 )
 
 var client = &http.Client{}
@@ -16,20 +18,37 @@ var client = &http.Client{}
 const MandelUrl = "http://104.196.204.230:80"
 
 func main() {
-	var dims int32 = 1000
+	// First send a test request to wake the server and get the connection
+	sendDefaultSquareRequest(10)
+
+	const testCount = 20
+
+	// Testing, get runtimes of each request with minimal interference
+	testingDims := []int32{1, 10, 100, 500, 1000}
+	for _, dims := range testingDims {
+		for i := 0; i < testCount; i++ {
+			time.Sleep(1000 * time.Millisecond)
+			sendDefaultSquareRequest(dims)
+		}
+	}
+	log.Println("Testing complete.")
+}
+
+func sendDefaultSquareRequest(dims int32) {
 	cb := &mandel.DoubleRect{Xmin: -1.5, Xmax: 1, Ymin: -1, Ymax: 1,}
 	ib := &mandel.IntRect{Xmin: 0, Xmax: dims, Ymin: 0, Ymax: dims,}
 
 	mandReq := &mandel.MandelRequest{
 		Cb: cb, Ib: ib,
-		MaxIter: 100, ViewWidth: 10, ViewHeight: 10,
+		MaxIter: 500, ViewWidth: dims, ViewHeight: dims,
 	}
-	computation, err := computeMandelCloud(mandReq)
-	log.Println("done")
-	log.Println(len(computation.Data))
+	print(strconv.Itoa(int(dims*dims)) + " ")
+	_, err := computeMandelCloud(mandReq)
 	if err != nil {
-		// TODO handle error
-		//log.Panic("Compute Mandel Cloud failed: ", err)
+		log.Println("Compute Mandel Cloud failed: ", err)
+	} else {
+		//log.Println("done")
+		//log.Println(len(computation.Data))
 	}
 }
 

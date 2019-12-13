@@ -134,6 +134,7 @@ async function handlePostRoot(req, res) {
   // Since the request should be a rectangle, we will put the pieces back into one long data array.
   let data = [];
   finishedMandRes.forEach(d => {
+	  // TODO concat is much slower than push. https://dev.to/uilicious/javascript-array-push-is-945x-faster-than-array-concat-1oki
     data = data.concat(d.data);
   });
 
