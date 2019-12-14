@@ -4,11 +4,15 @@ import (
 	"./mandel"
 	"bytes"
 	"github.com/golang/protobuf/proto"
-	"github.com/tgmeow/deferred-tic-toc"
 	"github.com/pkg/errors"
+	"github.com/tgmeow/deferred-tic-toc"
+	"image"
+	"image/color"
+	"image/png"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 )
@@ -19,7 +23,8 @@ const MandelUrl = "http://104.196.204.230:80"
 
 func main() {
 	// First send a test request to wake the server and get the connection
-	sendDefaultSquareRequest(10)
+	resp := sendDefaultSquareRequest(10)
+	saveSampleImage(resp)
 
 	const testCount = 20
 
@@ -34,7 +39,7 @@ func main() {
 	log.Println("Testing complete.")
 }
 
-func sendDefaultSquareRequest(dims int32) {
+func sendDefaultSquareRequest(dims int32) *mandel.MandelResponse {
 	cb := &mandel.DoubleRect{Xmin: -1.5, Xmax: 1, Ymin: -1, Ymax: 1,}
 	ib := &mandel.IntRect{Xmin: 0, Xmax: dims, Ymin: 0, Ymax: dims,}
 
@@ -43,12 +48,39 @@ func sendDefaultSquareRequest(dims int32) {
 		MaxIter: 500, ViewWidth: dims, ViewHeight: dims,
 	}
 	print(strconv.Itoa(int(dims*dims)) + " ")
-	_, err := computeMandelCloud(mandReq)
+	resp, err := computeMandelCloud(mandReq)
 	if err != nil {
 		log.Println("Compute Mandel Cloud failed: ", err)
 	} else {
 		//log.Println("done")
 		//log.Println(len(computation.Data))
+	}
+	return resp
+}
+
+func saveSampleImage(mandRes *mandel.MandelResponse) {
+	iter := 0
+	imgDims := image.Rect(0, 0, int(mandRes.Ib.Xmax), int(mandRes.Ib.Ymax))
+	myImg := image.NewRGBA(imgDims)
+	for y := 0; y < int(mandRes.Ib.Ymax); y++ {
+		for x := 0; x < int(mandRes.Ib.Xmax); x++ {
+			pixelColor := color.Gray{Y:uint8(float64(mandRes.Data[iter].NumIter*255)/float64(500))}
+			myImg.Set(x, y, pixelColor)
+			iter++
+		}
+	}
+	outputFile, err := os.Create("mandel.png")
+	if err != nil {
+		log.Panic("Failed to create output file.", err)
+	}
+	err = png.Encode(outputFile, myImg)
+	if err != nil {
+		log.Panic("Failed to encode output file.", err)
+	}
+
+	err = outputFile.Close()
+	if err != nil {
+		log.Panic("Failed to close output file.", err)
 	}
 }
 
